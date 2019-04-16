@@ -1,0 +1,76 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/pos/style.css' %}">
+
+<header>
+<form action="" method="get">
+    {{ form }}
+    <input type="submit" value="Submit">
+</form>
+<p>Add Purchase</p>
+<form method="post" id="purchaseForm" data-subcat-url="{% url 'ajax_load_subcat' %}"data-items-url="{% url 'ajax_load_items' %}" novalidate>
+	{% csrf_token %}
+	{{ purchase_form }}
+	<input id="refresh" type="submit" value="Submit">
+</form>
+<p>Add Deposit</p>
+<form method="post" id="depositForm" novalidate>
+  {% csrf_token %}
+  {{ deposit_form }}
+  <input id="refresh" type="submit" value="Submit">
+</form>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+  	//Checks for any cubcategories underneath main categories
+  	$("#id_category").change(function () {
+      var url = $("#purchaseForm").attr("data-subcat-url");  // get the url of the `load_cities` view
+      var categoryId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/pos/ajax/load-_____/)
+        data: {
+          'category': categoryId       // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_subcategory").html(data);  // replace the contents of the dropdown with the data that came from the server
+        }
+      });
+
+    });
+  	//Checks for any items directly under a category rather than a subcategory
+    $("#id_category").change(function () {
+      var url = $("#purchaseForm").attr("data-items-url");
+      var categoryId = $(this).val();
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,
+        data: {
+          'category': categoryId
+        },
+        success: function (data) {
+          $("#id_item").html(data); 
+        }
+      });
+
+    });
+    //Checks for items under a category
+    $("#id_subcategory").change(function () {
+      var url = $("#purchaseForm").attr("data-items-url");  // get the url of the `load_cities` view
+      var categoryId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    
+        data: {
+          'category': categoryId       
+        },
+        success: function (data) {  
+          $("#id_item").html(data);  
+        }
+      });
+
+    });
+  </script>
+</header>
+{% block content %}
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'pos/transaction_base.html' %}
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/pos/style.css' %}">
+
+{% block content %}
+<h1>{{ camper.firstName }} {{ camper.lastName }}<br>
+Current Balance : {{ camper.currentBalance }}</h1>
+<table id='camperTrans'>
+	<tr>
+	  <th>Category</th>
+	  <th>Item</th> 
+	  <th>Date</th>
+	  <th>Price</th>
+	  <th>Delete</th>
+	</tr>
+{% for transaction in transactionList %}
+	<tr>
+	  <td>{{ transaction.itemID.categoryID }}
+	  <td>{{ transaction.itemID }}</td> 
+	  <td>{{ transaction.transactionDate }}</td>
+	  <td>{{ transaction.itemID.itemPrice }}</td>
+	  <td><form action="{% url 'delete_transaction' transaction.transactionID %}" method='post'>{% csrf_token %}<button>Delete</button></form></td>
+	</tr>
+{% endfor %}
+</table>
+<p>Deposits</p>
+<table id='camperDeposits'>
+	<tr>
+	  <th>Amount</th>
+	  <th>Date</th>
+	  <th>Notes</th>
+	  <th>Delete</th>
+	</tr>
+{% for deposit in depositList %}
+	<tr>
+	  <td>{{ deposit.depositAmount }}</td>
+	  <td>{{ deposit.depositDate }}</td> 
+	  <td>{{ deposit.depositNotes }}</td>
+	  <td><form action="{% url 'delete_deposit' deposit.depositID %}" method='post'>{% csrf_token %}<button>Delete</button></form></td>
+	</tr>
+{% endfor %}
+</table>
+{% endblock %}
+

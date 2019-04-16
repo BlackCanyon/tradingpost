@@ -1,0 +1,36 @@
+<select>
+{% for customer in customer_list %}
+	<option value={{ customer.camperID }}>{{ customer.lastName }} {{ customer.firstName }}</option>
+{% endfor %}
+</select>
+<br>
+<br>
+<select>
+{% for category in category_list %}
+	<option value={{ category.categoryID }}>{{ category.categoryDesc }}</option>
+{% endfor %}
+</select>
+<select>
+{% for category in category_list %}
+	<option value={{ category.categoryID }}>{{ category.categoryDesc }}</option>
+{% endfor %}
+</select>
+<select>
+{% for item in item_list %}
+	<option value={{ item.itemID }}>{{ item.itemDesc }}</option>
+{% endfor %}
+</select>
+<br>
+<input type="text" list="items">
+	<datalist id="items">
+	{% for item in item_list %}
+	<option value={{ item.itemID }}>{{ item.itemDesc }}</option>
+	{% endfor %}
+	</datalist>
+</input>
+<br>
+<select>
+{% for category in top_lvl_categories %}
+	<option value={{ category.categoryID }}>{{ category.categoryDesc }}</option>
+{% endfor %}
+</select>
